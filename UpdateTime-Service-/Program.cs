@@ -14,12 +14,19 @@ namespace UpdateTime_Service_
         /// </summary>
         static void Main()
         {
+#if DEBUG
+            Service1 debugservice = new Service1();
+            debugservice.Debug();
+#else
+        
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
                 new Service1()
             };
             ServiceBase.Run(ServicesToRun);
+       
+#endif
         }
     }
 }

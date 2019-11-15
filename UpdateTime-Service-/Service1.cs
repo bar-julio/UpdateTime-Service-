@@ -22,6 +22,10 @@ namespace UpdateTime_Service_
         {
             AdjustTime();
         }
+        /// <summary>
+        /// Start function
+        /// </summary>
+        /// <param name="args"></param>
         protected override void OnStart(string[] args)
         {
             AdjustTime();
@@ -29,9 +33,7 @@ namespace UpdateTime_Service_
 
             timer = new Timer();
             timer.Elapsed += new ElapsedEventHandler(OnElapsedTime);
-
             timer.Interval = 240000; //number in milisecinds  
-
             timer.Enabled = true;
         }
 
@@ -55,7 +57,7 @@ namespace UpdateTime_Service_
             startInfo.FileName = "cmd.exe";
             startInfo.Verb = "runas";
 #if DEBUG
-            System.Diagnostics.Debug.WriteLine(Status(),"Debug");
+            System.Diagnostics.Debug.WriteLine(Status(),"**Debug**");
 #endif
             if (Status().CompareTo("Stopped") == 0)
             {
@@ -63,7 +65,7 @@ namespace UpdateTime_Service_
             }
             if (Status().CompareTo("Running") == 0)
             {
-                //Config and resync time
+                //Code to config and resync time
                 SendCom(ref startInfo, "/C w32tm /config /manualpeerlist:time.windows.com,0x9 /syncfromflags:manual /reliable:yes /update");
 
                 SendCom(ref startInfo, "/C net stop w32time && net start w32time");
@@ -71,7 +73,6 @@ namespace UpdateTime_Service_
                 SendCom(ref startInfo, "/C w32tm /resync /force");
             }
         }
-
         private void SendCom(ref ProcessStartInfo args, string command)
         {
             args.Arguments = command;
